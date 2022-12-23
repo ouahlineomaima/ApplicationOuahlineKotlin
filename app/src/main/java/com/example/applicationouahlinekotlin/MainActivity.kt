@@ -1,17 +1,51 @@
 package com.example.applicationouahlinekotlin
 
-import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.ListView
+import android.widget.AdapterView
+import android.widget.GridView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
+    // on below line we are creating
+    // variables for grid view and course list
+    lateinit var courseGRV: GridView
+    lateinit var courseList: List<GridViewModal>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var my_array = arrayOf("omaima ouahline", "étudiant 1", "étudiant 2", "étudiant 3", "étudiant 4", "étudiant 5")
-        var my_adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, my_array)
-        var my_list = findViewById<ListView>(R.id.my_list)
-        my_list.adapter = my_adapter
+
+        // initializing variables of grid view with their ids.
+        courseGRV = findViewById(R.id.idGRV)
+        courseList = ArrayList<GridViewModal>()
+
+        // on below line we are adding data to
+        // our course list with image and course name.
+        courseList = courseList + GridViewModal("Java", R.drawable.java)
+        courseList = courseList + GridViewModal("Kotlin", R.drawable.kotlin)
+        courseList = courseList + GridViewModal("Javascript", R.drawable.javascript)
+
+        // on below line we are initializing our course adapter
+        // and passing course list and context.
+        val courseAdapter = GridRVAdapter(courseList = courseList, this@MainActivity)
+
+        // on below line we are setting adapter to our grid view.
+        courseGRV.adapter = courseAdapter
+
+        // on below line we are adding on item
+        // click listener for our grid view.
+        courseGRV.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            // inside on click method we are simply displaying
+            // a toast message with course name.
+            Toast.makeText(
+                applicationContext, courseList[position].courseName + " selected",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
     }
 }
